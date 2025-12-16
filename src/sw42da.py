@@ -1,30 +1,31 @@
-import json
 import os
 
 import serial
+from dotenv import load_dotenv
 
+load_dotenv()
 
+# if os.path.isfile("/data/options.json"):
+#     json_path = "/data/options.json"
+# elif os.path.isfile("data/options.json"):
+#     json_path = "data/options.json"
+# else:
+#     raise Exception("Unable to load config options!")
+#
+# with open(json_path) as f:
+#     config = json.load(f)
+#
+# print(config)
 
-if os.path.isfile("/data/options.json"):
-    json_path = "/data/options.json"
-elif os.path.isfile("data/options.json"):
-    json_path = "data/options.json"
-else:
-    raise Exception("Unable to load config options!")
-
-with open(json_path) as f:
-    config = json.load(f)
-
-print(config)
-
-HOST_IP = config["HOST_IP"]
-HOST_PORT = config["HOST_PORT"]
-HOST_BAUDRATE = config["HOST_BAUDRATE"]
+HOST_IP = os.getenv("HOST_IP")
+HOST_PORT = os.getenv("HOST_PORT")
+HOST_BAUDRATE = os.getenv("HOST_BAUDRATE")
 
 if not HOST_IP:
     raise Exception("Could not load HOST_IP variable")
 
 _url = f"socket://{HOST_IP}:{HOST_PORT}"
+print(_url)
 
 
 class Sw42da:
