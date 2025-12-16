@@ -1,2 +1,2 @@
-SW42DA Api
+Api for Blustream SW42DA
 
