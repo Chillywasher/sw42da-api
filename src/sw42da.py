@@ -31,8 +31,7 @@ from dotenv import load_dotenv
 class Sw42da:
 
     def __init__(self):
-        self._url = f"socket://sw42da.local:8000"
-
+        self._url = f"socket://192.168.67.31:8000"
 
     async def send_command(self, c: str):
 
