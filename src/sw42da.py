@@ -1,13 +1,30 @@
+import json
 import os
 
 import serial
 
-from dotenv import load_dotenv
 
-load_dotenv()
-HOST_IP = os.getenv("HOST_IP")
-HOST_PORT = os.getenv("HOST_PORT")
-HOST_BAUDRATE = os.getenv("HOST_BAUDRATE", "57600")
+
+if os.path.isfile("/data/options.json"):
+    json_path = "/data/options.json"
+elif os.path.isfile("data/options.json"):
+    json_path = "data/options.json"
+else:
+    raise Exception("Unable to load config options!")
+
+with open(json_path) as f:
+    config = json.load(f)
+
+print(config)
+
+HOST_IP = config["HOST_IP"]
+HOST_PORT = config["HOST_PORT"]
+HOST_BAUDRATE = config["HOST_BAUDRATE"]
+
+if not HOST_IP:
+    raise Exception("Could not load HOST_IP variable")
+
+_url = f"socket://{HOST_IP}:{HOST_PORT}"
 
 
 class Sw42da:
@@ -17,6 +34,10 @@ class Sw42da:
 
 
     async def send_command(self, c: str):
+
+        if not HOST_IP or not HOST_PORT or not HOST_BAUDRATE:
+            print("Waiting for config options")
+            return None
 
         if not c.endswith("\n"):
             c = c + "\n"

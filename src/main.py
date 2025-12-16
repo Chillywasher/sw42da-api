@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -15,9 +16,6 @@ from sw42da import Sw42da
 from sw42da_utility import Sw42daUtility
 
 load_dotenv()
-HOST_IP = os.getenv("HOST_IP")
-HOST_PORT = os.getenv("HOST_PORT")
-HOST_BAUDRATE = os.getenv("HOST_BAUDRATE", "57600")
 FASTAPI_LOG_LEVEL = os.getenv("LOG_LEVEL", "info")
 
 ON = "On"
@@ -25,7 +23,6 @@ OFF = "Off"
 MUTE = "Mute"
 VOLUME = "Volume"
 
-_url = f"socket://{HOST_IP}:{HOST_PORT}"
 cs = CachedStatus(expires_seconds=30)
 su = Sw42daUtility()
 sc = Sw42da()
@@ -49,6 +46,8 @@ app.add_middleware(
 async def cache_updater_loop():
     count = 0
     while True:
+        count +=1
+        # print(f"Refreshing cache [{count}]")
         await asyncio.sleep(3)
         await cs.get_cache()
 
@@ -145,6 +144,6 @@ def response_success(resp: list):
     return True
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8130, log_level=FASTAPI_LOG_LEVEL, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8030, log_level=FASTAPI_LOG_LEVEL, reload=True)
 
 
