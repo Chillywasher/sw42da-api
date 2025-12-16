@@ -13,6 +13,9 @@ on:
   release:
     types: [published]
 
+  push:
+    branches: [ "main", "latest" ]
+
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -36,7 +39,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: my-docker-hub-namespace/my-docker-hub-repository
+          images: chillywasher/sw42da-api
 
       - name: Build and push Docker image
         id: push
