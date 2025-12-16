@@ -45,11 +45,8 @@ USER appuser
 COPY src/ ./
 
 # Args are build time only
-ARG CONTAINER_PORT
+ARG 8030
 # Expose the port that the application listens on.
-EXPOSE ${CONTAINER_PORT}
+EXPOSE 8030
 
-# Envs used at runtime
-ENV PORT=${CONTAINER_PORT}
-
-CMD ["sh", "-c", "uvicorn main:app --host=0.0.0.0 --port=${PORT}"]
+CMD ["sh", "-c", "uvicorn main:app --host=0.0.0.0 --port=8030"]
