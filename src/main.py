@@ -8,7 +8,7 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.responses import HTMLResponse
 
 from cached_status import CachedStatus
 from models import CommandString
@@ -33,6 +33,22 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(docs_url="/", lifespan=lifespan)
+
+@app.exception_handler(404)
+async def custom_404_handler(_, __):
+    response_404 = """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <title>Not Found</title>
+                        <script> location.href='/' </script>
+                    </head>
+                    <body>
+                        <p>The file you requested was not found.</p>
+                    </body>
+                    </html>
+                    """
+    return HTMLResponse(response_404)
 
 # noinspection PyTypeChecker
 app.add_middleware(
